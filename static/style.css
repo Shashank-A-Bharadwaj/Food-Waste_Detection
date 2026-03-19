@@ -1,0 +1,98 @@
+/* Custom Utilities and Overrides for Tailwind */
+
+@layer base {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Base Form Inputs */
+.input-field {
+  @apply px-4 py-3 bg-white border border-border rounded-xl text-text transition-all duration-200 outline-none;
+}
+
+.input-field:focus {
+  @apply border-accent ring-2 ring-accent/20;
+}
+
+.input-field:hover {
+  @apply border-gray-400;
+}
+
+/* Primary Button */
+.btn-primary {
+  @apply bg-accent text-white px-8 py-4 rounded-xl font-medium shadow-premium transition-all duration-300 transform outline-none select-none;
+}
+
+.btn-primary:hover {
+  @apply bg-accentHover shadow-premium-hover scale-[1.02] brightness-105;
+}
+
+.btn-primary:active {
+  @apply scale-[0.98];
+}
+
+/* Form Custom Toggle */
+input:checked + .bg-gray-200 {
+  background-color: theme('colors.accent');
+}
+
+/* Cards */
+.card {
+  @apply bg-cardBg border border-border rounded-3xl shadow-premium transition-shadow hover:shadow-premium-hover;
+}
+
+.insight-card {
+  @apply card p-8 sm:p-10 cursor-default transition-all duration-300;
+}
+.insight-card:hover {
+  @apply -translate-y-1 shadow-premium-hover bg-slate-50 border-accent/20;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+/* Scrollbar styling for that extra polish */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

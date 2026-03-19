@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Waste Detection| Eliminate Food Waste</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style type="text/tailwindcss">
+        @layer base {
+          body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        }
+        
+        /* Enhanced Motion background - Sophisticated animated gradients */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, #0f1419 0%, #1a1f2e 20%, #2d1b4e 40%, #1a1f2e 60%, #0f1419 80%, #0f1419 100%),
+                linear-gradient(135deg, #0a0e16 0%, #1f1535 30%, #2a1a3e 50%, #1f1535 70%, #0a0e16 100%),
+                linear-gradient(90deg, transparent 0%, rgba(99, 91, 255, 0.05) 25%, transparent 50%, rgba(99, 91, 255, 0.05) 75%, transparent 100%);
+            background-size: 400% 400%, 300% 300%, 200% 200%;
+            background-position: 0% 50%, 100% 50%, 0% 0%;
+            animation: gradientFlow1 15s ease-in-out infinite, gradientFlow2 20s ease-in-out infinite, gradientFlow3 25s linear infinite;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(99, 91, 255, 0.15) 0%, rgba(99, 91, 255, 0.05) 25%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(139, 92, 246, 0.12) 0%, rgba(139, 92, 246, 0.04) 25%, transparent 50%),
+                radial-gradient(ellipse at 50% 100%, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.03) 30%, transparent 60%),
+                radial-gradient(ellipse at 50% 0%, rgba(168, 85, 247, 0.08) 0%, rgba(168, 85, 247, 0.02) 30%, transparent 60%);
+            animation: orbDrift 35s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+            z-index: -1;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes gradientFlow1 {
+            0% { background-position: 0% 50%, 100% 50%, 0% 0%; }
+            50% { background-position: 100% 50%, 0% 50%, 100% 0%; }
+            100% { background-position: 0% 50%, 100% 50%, 200% 0%; }
+        }
+
+        @keyframes gradientFlow2 {
+            0% { background-position: 0% 50%, 100% 50%, 0% 0%; }
+            25% { background-position: 50% 50%, 50% 50%, 25% 0%; }
+            50% { background-position: 100% 50%, 0% 50%, 50% 0%; }
+            75% { background-position: 50% 50%, 50% 50%, 75% 0%; }
+            100% { background-position: 0% 50%, 100% 50%, 100% 0%; }
+        }
+
+        @keyframes gradientFlow3 {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 0%; }
+        }
+
+        @keyframes orbDrift {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            12% { transform: translate(120px, -80px) scale(1.25) rotate(45deg); }
+            25% { transform: translate(-60px, 100px) scale(0.8) rotate(90deg); }
+            37% { transform: translate(100px, 60px) scale(1.1) rotate(135deg); }
+            50% { transform: translate(-120px, -100px) scale(0.9) rotate(180deg); }
+            62% { transform: translate(80px, 80px) scale(1.2) rotate(225deg); }
+            75% { transform: translate(-80px, -60px) scale(0.95) rotate(270deg); }
+            87% { transform: translate(60px, 120px) scale(1.15) rotate(315deg); }
+            100% { transform: translate(0, 0) scale(1) rotate(360deg); }
+        }
+        
+        .input-field { @apply px-4 py-3 bg-cardBg border border-border rounded-xl text-text transition-all duration-300 outline-none; }
+        .input-field:focus { @apply border-accent ring-2 ring-accent/50 shadow-[0_0_20px_rgba(99,91,255,0.5)]; }
+        .input-field:hover { @apply border-accent/70 shadow-[0_0_15px_rgba(99,91,255,0.3)]; }
+        .btn-primary { @apply bg-accent text-white px-8 py-4 rounded-xl font-medium shadow-premium transition-all duration-300 transform outline-none select-none; }
+        .btn-primary:hover { @apply bg-accentHover shadow-[0_0_30px_rgba(99,91,255,0.6)] scale-[1.02] brightness-110; }
+        .btn-primary:active { @apply scale-[0.98]; }
+        input:checked + .bg-gray-200 { background-color: theme('colors.accent'); }
+        .card { @apply bg-cardBg border border-border rounded-3xl shadow-premium transition-all duration-300 hover:shadow-[0_0_40px_rgba(99,91,255,0.4)] backdrop-blur-sm; }
+        .card:hover { @apply border-accent/50; }
+        .insight-card { @apply card p-8 sm:p-10 cursor-default transition-all duration-300; }
+        .insight-card:hover { @apply -translate-y-1 shadow-[0_0_35px_rgba(99,91,255,0.45)] border-accent/50; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in-up { opacity: 0; animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3d4454; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4d5566; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        bg: '#0f1419',
+                        text: '#f5f5f7',
+                        accent: '#635BFF',
+                        accentHover: '#7A72FF',
+                        grayMid: '#a1a1a6',
+                        cardBg: '#1a1f2e',
+                        border: '#2d3142',
+                    },
+                    boxShadow: {
+                        'premium': '0 20px 40px rgba(99, 91, 255, 0.12)',
+                        'premium-hover': '0 30px 60px rgba(99, 91, 255, 0.18)',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-bg text-text font-sans antialiased selection:bg-accent selection:text-white">
+
+    <!-- Fixed Navbar -->
+    <nav class="fixed top-0 w-full bg-cardBg/80 backdrop-blur-lg border-b border-border z-50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div
+                    class="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-[#8E86FF] shadow-sm flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <span class="font-bold text-xl tracking-tight text-text">Smart Waste Detection</span>
+            </div>
+            <div class="hidden md:flex items-center gap-8 font-medium text-grayMid">
+                <a href="#predict" class="hover:text-text transition-colors">Predict</a>
+                <a href="#insights" class="hover:text-text transition-colors">Insights</a>
+            </div>
+            <div class="flex items-center">
+                <a href="/notebook/dataset.csv" target="_blank"
+                   class="text-sm font-semibold bg-accent/10 text-accent hover:bg-accent/20 px-4 py-2 rounded-full transition-colors flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    Data
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-40 pb-32 flex items-center min-h-[90vh] overflow-hidden">
+        <!-- Decorative bg blur -->
+        <div
+            class="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-[800px] h-[800px] bg-accent/10 rounded-full blur-3xl -z-10">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-3xl -z-10">
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center w-full">
+            <div class="fade-in-up">
+                <div
+                    class="inline-block px-4 py-1.5 rounded-full border border-accent/40 bg-accent/10 text-sm font-semibold text-accent mb-6 shadow-sm">
+                    ML Model Deployed
+                </div>
+                <h1
+                    class="text-[4.5rem] md:text-[5.5rem] font-extrabold tracking-[-0.04em] leading-[0.95] text-transparent bg-clip-text bg-gradient-to-br from-text to-[#324b66] mb-8">
+                    Predict Meals.<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-[#8E86FF]">Eliminate
+                        Waste.</span>
+                </h1>
+                <p class="text-[1.25rem] text-grayMid leading-relaxed mb-10 max-w-xl">
+                    Enterprise-grade AI demand forecasting for high-volume food service. Stop guessing. Save money. Save
+                    the planet.
+                </p>
+                <div class="flex items-center gap-4">
+                    <a href="#predict" class="btn-primary flex items-center justify-center gap-2 group">
+                        Start Prediction
+                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Hero Graphic (Abstract UI Card) -->
+            <div class="fade-in-up delay-200 hidden md:block">
+                <div
+                    class="bg-cardBg rounded-3xl p-8 shadow-premium border border-border/50 transform rotate-1 hover:rotate-0 transition-all duration-500 backdrop-blur-sm hover:shadow-[0_0_50px_rgba(99,91,255,0.35)] hover:border-accent/50 group">
+                    <div class="absolute inset-0 rounded-3xl bg-gradient-to-br from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between border-b border-border/30 pb-6 mb-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-accent/40 to-accent/20 flex items-center justify-center text-accent shadow-[0_0_15px_rgba(99,91,255,0.4)] group-hover:shadow-[0_0_25px_rgba(99,91,255,0.6)] transition-all">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-accent to-[#8E86FF] text-lg">Forecast</h3>
+                                    <p class="text-sm text-grayMid">High Confidence</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 font-mono group-hover:scale-110 transition-transform">512</div>
+                                <div class="text-sm font-bold text-emerald-400">Meals Needed</div>
+                            </div>
+                        </div>
+                        <!-- Minimalist mock chart -->
+                        <div class="h-32 flex items-end gap-2 px-2">
+                            <div class="w-full bg-gradient-to-t from-accent/30 to-accent/10 rounded-t-sm hover:from-accent/40 hover:to-accent/20 transition-all" style="height: 40%"></div>
+                            <div class="w-full bg-gradient-to-t from-accent/40 to-accent/15 rounded-t-sm hover:from-accent/50 hover:to-accent/25 transition-all" style="height: 60%"></div>
+                            <div class="w-full bg-gradient-to-t from-accent/25 to-accent/8 rounded-t-sm hover:from-accent/35 hover:to-accent/15 transition-all" style="height: 35%"></div>
+                            <div class="w-full bg-gradient-to-t from-accent/45 to-accent/20 rounded-t-sm hover:from-accent/55 hover:to-accent/30 transition-all" style="height: 80%"></div>
+                            <div class="w-full bg-gradient-to-t from-accent/35 to-accent/12 rounded-t-sm hover:from-accent/45 hover:to-accent/20 transition-all" style="height: 55%"></div>
+                            <div class="w-full bg-gradient-to-t from-accent to-accent/50 rounded-t-sm relative shadow-[0_0_20px_rgba(99,91,255,0.5)] group-hover:shadow-[0_0_30px_rgba(99,91,255,0.8)] transition-all" style="height: 90%">
+                                <div
+                                    class="absolute -top-4 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-white shadow-lg ring-2 ring-accent animate-pulse group-hover:scale-125 transition-transform">
+                                </div>
+                            </div>
+                            <div class="w-full bg-gradient-to-t from-border/50 to-border/20 rounded-t-sm hover:from-border/70 hover:to-border/40 transition-all" style="height: 70%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Prediction Tool Section -->
+    <section id="predict" class="py-24 bg-cardBg/30 relative z-10 border-t border-border">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-[2.25rem] font-bold tracking-tight mb-4">Run the Prediction Engine</h2>
+                <p class="text-lg text-grayMid max-w-2xl mx-auto">Input the contextual factors for your next service.
+                    The model processes 10+ engineered features to deliver actionable targets instantly.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8 items-stretch">
+                <!-- Input Form Card -->
+                <div class="card p-8 md:p-10 fade-in-up">
+                    <form id="predictionForm" class="space-y-6">
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <!-- Day of Week -->
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-text">Day of Week</label>
+                                <select name="Day_of_Week" class="input-field w-full" required>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                    <option value="Saturday">Saturday</option>
+                                    <option value="Sunday">Sunday</option>
+                                </select>
+                            </div>
+
+                            <!-- Weather -->
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-text">Weather Forecast</label>
+                                <select name="Weather" class="input-field w-full" required>
+                                    <option value="Sunny">☀️ Sunny</option>
+                                    <option value="Cloudy">⛅ Cloudy</option>
+                                    <option value="Rainy">🌧️ Rainy</option>
+                                    <option value="Stormy">⛈️ Stormy</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Festival Toggle -->
+                        <div class="flex items-center justify-between p-4 rounded-xl border border-border bg-cardBg/50 transition-all duration-300 hover:border-accent/50 hover:shadow-[0_0_20px_rgba(99,91,255,0.3)]">
+                            <div>
+                                <h4 class="font-semibold text-text">Festival / Special Event</h4>
+                                <p class="text-sm text-grayMid">Is this a major local event day?</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="festivalToggle" class="sr-only peer">
+                                <div
+                                    class="w-11 h-6 bg-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent/20 after:border-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent/50 transition-all peer-checked:shadow-[0_0_15px_rgba(99,91,255,0.6)] peer-checked:border-accent peer-focus:shadow-[0_0_20px_rgba(99,91,255,0.4)]">
+                                </div>
+                            </label>
+                            <input type="hidden" name="Festival" id="FestivalInput" value="0">
+                        </div>
+
+                        <div class="grid gap-6">
+                            <!-- Expected Base -->
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-text flex items-center justify-between">
+                                    Expected Base Customers
+                                    <span class="text-xs text-grayMid font-normal">Typical baseline</span>
+                                </label>
+                                <input type="number" name="Expected_Customers" class="input-field w-full" value="500"
+                                    required min="0">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-6">
+                                <!-- Prev Day -->
+                                <div class="space-y-2">
+                                    <label class="text-sm font-semibold text-text">Yesterday's Meals</label>
+                                    <input type="number" name="Previous_Day_Consumption" class="input-field w-full"
+                                        value="450" required min="0">
+                                </div>
+
+                                <!-- Prev Week -->
+                                <div class="space-y-2">
+                                    <label class="text-sm font-semibold text-text">Last Wk Same Day</label>
+                                    <input type="number" name="Previous_Week_Same_Day" class="input-field w-full"
+                                        value="480" required min="0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="submitBtn"
+                            class="btn-primary w-full flex items-center justify-center gap-3 mt-8">
+                            <span>Calculate Output</span>
+                            <div id="loadingSpinner"
+                                class="hidden w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin">
+                            </div>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Result Card -->
+                <div
+                    class="card p-8 md:p-10 flex flex-col justify-center min-h-[400px] h-full relative overflow-hidden group fade-in-up delay-100 hover:shadow-[0_0_60px_rgba(99,91,255,0.4)]">
+                    <div class="absolute inset-0 rounded-3xl bg-gradient-to-br from-accent/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                    <div
+                        class="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-accent/20 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:from-accent/30 transition-all">
+                    </div>
+
+                    <div id="emptyState" class="text-center transition-all duration-300 relative z-10">
+                        <div
+                            class="w-16 h-16 rounded-full bg-gradient-to-br from-border/50 to-border/20 border border-border/50 flex items-center justify-center text-grayMid mx-auto mb-6 group-hover:shadow-[0_0_25px_rgba(99,91,255,0.3)] transition-all">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                                </path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-text">Awaiting Parameters</h3>
+                        <p class="text-grayMid">Your prediction and waste reduction insights will appear here.</p>
+                    </div>
+
+                    <div id="resultState"
+                        class="hidden text-center transition-all duration-500 transform translate-y-4 opacity-0 z-10 relative">
+                        <div
+                            class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-300 text-sm font-bold tracking-wide uppercase mb-8 shadow-[0_0_15px_rgba(34,197,94,0.3)] border border-emerald-500/30">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Result Synthesized
+                        </div>
+
+                        <p class="font-semibold text-grayMid mb-2 uppercase tracking-widest text-sm">Target Prep
+                            Quantity</p>
+                        <div class="flex items-baseline justify-center gap-2 mb-8">
+                            <span id="predValue"
+                                class="text-[5rem] font-black leading-none tracking-tighter bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent font-mono drop-shadow-lg">--</span>
+                            <span class="text-xl font-bold text-grayMid">meals</span>
+                        </div>
+
+                        <div class="pt-8 border-t border-border/50 flex flex-col items-center relative">
+                            <div class="absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-500/5 to-cyan-500/5 -m-4"></div>
+                            <div class="relative z-10 flex items-center gap-3 text-accent font-bold text-lg">
+                                <svg class="w-6 h-6 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M12 16.586l5.293-5.293a1 1 0 111.414 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 111.414-1.414L12 16.586z" clip-rule="evenodd"></path>
+                                </svg>
+                                Reduce organic waste by <span id="wasteValue"
+                                    class="text-emerald-400 font-black">--</span>%
+                            </div>
+                            <p class="text-sm text-grayMid mt-2 max-w-[280px] relative z-10">AI-powered prediction using advanced machine learning models for optimal accuracy.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Insights Section -->
+    <section id="insights" class="py-24 bg-bg/50 border-t border-border">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-16">
+                <h2 class="text-[2.25rem] font-bold tracking-tight mb-4">Feature Impact Analysis</h2>
+                <p class="text-lg text-grayMid max-w-xl">How the underlying model interprets contextual
+                    dimensions.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Insight Card 1 -->
+                <div class="insight-card group">
+                    <div
+                        class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mb-6 border border-blue-200 group-hover:scale-110 transition-transform">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h4 class="font-bold text-lg mb-2 text-text">Weather Volatility</h4>
+                    <p class="text-sm text-grayMid leading-relaxed">Rainy and Stormy conditions trigger a heavy
+                        penalization weight, uniformly decreasing expected walk-ins globally.</p>
+                </div>
+
+                <!-- Insight Card 2 -->
+                <div class="insight-card group">
+                    <div
+                        class="w-10 h-10 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center mb-6 border border-orange-200 group-hover:scale-110 transition-transform">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="font-bold text-lg mb-2 text-text">Demand Lag</h4>
+                    <p class="text-sm text-grayMid leading-relaxed">High historical correlation exists between the gap
+                        of "yesterday vs expected". The model leans heavily on short-term momentum.</p>
+                </div>
+
+                <!-- Insight Card 3 -->
+                <div class="insight-card group">
+                    <div
+                        class="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center mb-6 border border-purple-200 group-hover:scale-110 transition-transform">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h4 class="font-bold text-lg mb-2 text-text">Weekend Modifiers</h4>
+                    <p class="text-sm text-grayMid leading-relaxed">Saturdays create an automatic multiplier overlay.
+                        The variance spread is highest on weekends requiring complex tree logic.</p>
+                </div>
+
+                <!-- Insight Card 4 -->
+                <div class="insight-card group">
+                    <div
+                        class="w-10 h-10 rounded-lg bg-green-100 text-green-600 flex items-center justify-center mb-6 border border-green-200 group-hover:scale-110 transition-transform">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="font-bold text-lg mb-2 text-text">Festival Anomaly</h4>
+                    <p class="text-sm text-grayMid leading-relaxed">Boolean festival flags act as primary split-nodes
+                        early in the RF architecture, overriding weather penalizations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-cardBg border-t border-border text-grayMid py-16">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded bg-accent/20 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <span class="font-bold text-text tracking-tight">Smart Waste predictor</span>
+                </div>
+                <p class="text-sm">Built with Python, Scikit-learn, and modern web tech.</p>
+                <div class="flex gap-6 text-sm hover:text-text transition-colors">
+                    <a href="/notebook/model_training.ipynb"
+                        class="hover:text-accent transition-colors">Documentation</a>
+                </div>
+            </div>
+            <div class="border-t border-border/50 mt-12 pt-8 text-[13px] text-center w-full">
+
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set up toggle logic
+        document.getElementById('festivalToggle').addEventListener('change', function (e) {
+            document.getElementById('FestivalInput').value = e.target.checked ? "1" : "0";
+        });
+
+        // Handle form logic
+        document.getElementById('predictionForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const btn = document.getElementById('submitBtn');
+            const spinner = document.getElementById('loadingSpinner');
+            const form = new FormData(this);
+
+            // UI Loading state
+            btn.querySelector('span').textContent = 'Processing...';
+            spinner.classList.remove('hidden');
+            btn.classList.add('opacity-90', 'cursor-not-allowed');
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: form
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update UI state
+                    const empty = document.getElementById('emptyState');
+                    const result = document.getElementById('resultState');
+
+                    document.getElementById('predValue').textContent = data.prediction;
+                    document.getElementById('wasteValue').textContent = data.waste_reduction_percent;
+
+                    empty.classList.add('hidden', 'opacity-0');
+                    empty.classList.remove('opacity-100');
+
+                    result.classList.remove('hidden');
+                    // Force reflow
+                    void result.offsetWidth;
+                    result.classList.remove('translate-y-4', 'opacity-0');
+                    result.classList.add('translate-y-0', 'opacity-100');
+
+                    // Simple counter animation
+                    animateValue("predValue", 0, data.prediction, 1000);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (err) {
+                alert('Connection error');
+                console.error(err);
+            } finally {
+                // Restore button state
+                btn.querySelector('span').textContent = 'Calculate Output';
+                spinner.classList.add('hidden');
+                btn.classList.remove('opacity-90', 'cursor-not-allowed');
+            }
+        });
+
+        // Simple counter animation utility
+        function animateValue(id, start, end, duration) {
+            if (start === end) return;
+            var range = end - start;
+            var current = start;
+            var increment = end > start ? 1 : -1;
+            // ensure it finishes on time
+            var steps = Math.min(range, 60);
+            var stepTime = Math.abs(Math.floor(duration / steps));
+            var obj = document.getElementById(id);
+            var actualIncr = range / steps;
+
+            var timer = setInterval(function () {
+                current += actualIncr;
+                if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+                    obj.innerHTML = end;
+                    clearInterval(timer);
+                } else {
+                    obj.innerHTML = Math.floor(current);
+                }
+            }, stepTime);
+        }
+    </script>
+</body>
+
+</html>

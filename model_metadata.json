@@ -1,0 +1,79 @@
+{
+  "feature_cols": [
+    "Day_Encoded",
+    "Festival",
+    "Expected_Customers",
+    "Previous_Day_Consumption",
+    "Previous_Week_Same_Day",
+    "Weather_Sunny",
+    "Weather_Cloudy",
+    "Weather_Rainy",
+    "Weather_Stormy",
+    "Is_Weekend",
+    "Avg_Historical_Demand",
+    "Customer_Demand_Ratio",
+    "Festival_Customer_Interaction",
+    "Demand_Momentum"
+  ],
+  "encoder_info": {
+    "day_order": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ],
+    "weather_cats": [
+      "Cloudy",
+      "Rainy",
+      "Stormy",
+      "Sunny"
+    ],
+    "day_map": {
+      "Monday": 0,
+      "Tuesday": 1,
+      "Wednesday": 2,
+      "Thursday": 3,
+      "Friday": 4,
+      "Saturday": 5,
+      "Sunday": 6
+    }
+  },
+  "metrics": {
+    "Random Forest": {
+      "MAE": 25.027623409393673,
+      "RMSE": 30.073676935356318,
+      "R2": 0.8016627776134727
+    },
+    "Gradient Boosting": {
+      "MAE": 26.10598123058373,
+      "RMSE": 31.689160152635974,
+      "R2": 0.7797820956032417
+    }
+  },
+  "best_model_name": "Random Forest",
+  "feature_importance": {
+    "Day_Encoded": 0.015879572895167948,
+    "Festival": 0.02984942994756879,
+    "Expected_Customers": 0.47296391538811977,
+    "Previous_Day_Consumption": 0.040528646326861706,
+    "Previous_Week_Same_Day": 0.03708039463459641,
+    "Weather_Sunny": 0.010496921573623171,
+    "Weather_Cloudy": 0.010740410823645373,
+    "Weather_Rainy": 0.017689164884554028,
+    "Weather_Stormy": 0.02188819608326508,
+    "Is_Weekend": 0.00352659749762194,
+    "Avg_Historical_Demand": 0.04539484772705855,
+    "Customer_Demand_Ratio": 0.1981952378336466,
+    "Festival_Customer_Interaction": 0.06716112143984451,
+    "Demand_Momentum": 0.028605542944426153
+  },
+  "target_stats": {
+    "mean": 396.483,
+    "std": 72.99772859054848,
+    "min": 240.0,
+    "max": 606.0
+  }
+}
