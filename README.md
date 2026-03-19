@@ -1,4 +1,4 @@
-# Food Waste Detection
+# Food Waste Prediction
 
 > **Enterprise-grade AI demand forecasting that stops food waste before it happens.**
 
