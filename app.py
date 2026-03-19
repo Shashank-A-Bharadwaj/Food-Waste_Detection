@@ -147,7 +147,7 @@ def serve_notebook(filename):
 @app.route('/predict', methods=['POST'])
 def predict():
     """
-    BUG 5 FIX — accepts both JSON (fetch/axios from index.html)
+    accepts both JSON (fetch/axios from index.html)
     and form-encoded POST from HTML forms.
     """
     try:
