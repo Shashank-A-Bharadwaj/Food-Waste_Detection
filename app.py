@@ -3,6 +3,7 @@
 Smart Food Waste Prediction System — Flask Application
 =============================================================
 
+
 """
 
 import os
@@ -22,6 +23,7 @@ app = Flask(__name__)
 # ─────────────────────────────────────────────────────────────
 
 # Ordinal map: preserves Mon → Sun weekly order
+# LabelEncoder would give alphabetical: Fri=0, Mon=1… (WRONG)
 DAY_ORDER = ['Monday','Tuesday','Wednesday','Thursday',
              'Friday','Saturday','Sunday']
 DAY_MAP   = {d: i for i, d in enumerate(DAY_ORDER)}
@@ -85,9 +87,9 @@ def build_feature_row(day_of_week: str,
                       expected_customers: float,
                       prev_day: float,
                       prev_week: float) -> pd.DataFrame:
+   
 
-
-    # ordinal encoding, not LabelEncoder
+    #  ordinal encoding, not LabelEncoder
     day_encoded = DAY_MAP.get(day_of_week, 0)
 
     # Weather one-hot (all 4 columns, no drop_first)
@@ -145,7 +147,7 @@ def serve_notebook(filename):
 @app.route('/predict', methods=['POST'])
 def predict():
     """
-    accepts both JSON (fetch/axios from index.html)
+    BUG 5 FIX — accepts both JSON (fetch/axios from index.html)
     and form-encoded POST from HTML forms.
     """
     try:
