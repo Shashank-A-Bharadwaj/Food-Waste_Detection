@@ -1,7 +1,6 @@
 """
 =============================================================
 fix_model.py  —  Run this ONCE to fix your model.pkl
-=============================================================
 WHAT IT DOES:
   1. Reads your existing model.pkl (bare RandomForest object)
   2. Re-trains a StandardScaler on the original dataset
